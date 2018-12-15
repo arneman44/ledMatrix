@@ -16,7 +16,6 @@ for i in range(packet_size):		# fill packet with sequential values
 
 # ... AND SET IT TO STUPID ARTNET
 a.set(packet)						# only on changes
-a.start()
 w, h = 21, 8;
 
 Matrix = [[0 for x in range(w)] for y in range(h)]
@@ -148,8 +147,10 @@ def main(uur,min,R,G,B):
     print(MATRIX_out)
     a.set(array)
     a.show()
-    time.sleep(0.01)
+    time.sleep(1)
 
+minslate = 123
+RGBlate = getRGB()
 while True:
     now = datetime.datetime.now()
     mins = now.minute
@@ -159,10 +160,16 @@ while True:
     RGB = getRGB()
     STATE = RGB[3]
     if STATE == 1:
-        main(houre,mins,RGB[0],RGB[1],RGB[2])
+        if mins != minslate:
+            main(houre,mins,RGB[0],RGB[1],RGB[2])
+        if RGB != RGBlate:
+            main(houre, mins, RGB[0], RGB[1], RGB[2])
     else:
         a.blackout()
+
     time.sleep(1)
+    minslate = mins
+    RGBlate = RGB
 
 
 
